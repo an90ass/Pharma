@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharma/features/inventory/presentation/screens/create_purchase_order_screen.dart';
 import 'package:pharma/features/inventory/presentation/screens/purchase_orders_screen.dart';
+import 'package:pharma/features/reports/presentation/screens/reports_screen.dart' show ReportsScreen;
 import 'package:pharma/features/settings/presentation/screens/settings_screen.dart';
 import 'package:pharma/features/suppliers/presentation/screens/supplier_list_screen.dart';
 
@@ -127,7 +128,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/suppliers',
         builder: (_, __) => const SupplierListScreen(),
       ),
-
+  GoRoute(
+        path: '/reports',
+        builder: (_, __) => const ReportsScreen(),
+      ),
     ],
 
       errorBuilder: (context, state) => Scaffold(
