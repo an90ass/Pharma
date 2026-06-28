@@ -136,7 +136,7 @@ class StatCard extends StatelessWidget {
   String _formatValue() {
     if (isCurrency) {
       final formatter =
-          NumberFormat.currency(symbol: 'Rs ', decimalDigits: 0);
+          NumberFormat.currency(symbol: '\$ ', decimalDigits: 0);
       return formatter.format(value);
     }
     return NumberFormat.compact().format(value);

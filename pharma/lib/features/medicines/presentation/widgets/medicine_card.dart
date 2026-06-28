@@ -155,14 +155,14 @@ class MedicineCard extends StatelessWidget {
                 Expanded(
                   child: _PriceItem(
                     label: 'Sale',
-                    value: 'Rs ${medicine.salePrice.toStringAsFixed(0)}',
+                    value: '\$${medicine.salePrice.toStringAsFixed(0)}',
                     valueColor: const Color(0xFF2E7D32),
                   ),
                 ),
                 Expanded(
                   child: _PriceItem(
                     label: 'Purchase',
-                    value: 'Rs ${medicine.purchasePrice.toStringAsFixed(0)}',
+                    value: '\$${medicine.purchasePrice.toStringAsFixed(0)}',
                     valueColor: const Color(0xFF1565C0),
                   ),
                 ),

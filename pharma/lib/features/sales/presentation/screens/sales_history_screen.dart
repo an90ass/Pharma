@@ -285,7 +285,7 @@ class _StatsBar extends StatelessWidget {
           _StatItem(
               label: 'Total',
               value: NumberFormat.currency(
-                      symbol: 'Rs ', decimalDigits: 0)
+                      symbol: '\$ ', decimalDigits: 0)
                   .format(total)),
         ],
       ),

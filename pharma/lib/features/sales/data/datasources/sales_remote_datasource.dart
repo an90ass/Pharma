@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:pharma/features/sales/domain/entities/invoice_item_entity.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../domain/entities/cart_entity.dart';
 import '../../domain/entities/invoice_entity.dart';
@@ -100,16 +101,74 @@ class SalesRemoteDataSourceImpl implements SalesRemoteDataSource {
       final invoiceRef  = _invoices.doc();
       final invoiceNo   =
           'INV-${DateTime.now().year}-${invoiceRef.id.substring(0, 6).toUpperCase()}';
-      final earned      = (cart.grandTotal / 100).floor(); // 1 pt per Rs 100
+      final earned      = (cart.grandTotal / 100).floor(); // 1 pt per $100
 
       final batch = _fs.batch();
 
+      // 1. Resolve batches for each cart item (FIFO order) and prepare split items
+      final resolvedItems = <InvoiceItemEntity>[];
 
-      // 1. Create invoice document
+      for (final item in cart.items) {
+        final batchesSnap = await _batches
+            .where('medicineId', isEqualTo: item.medicineId)
+            .get();
+
+        final activeBatches = batchesSnap.docs.where((doc) {
+          final data = doc.data();
+          final isStatusActive = data['status'] == 'active';
+          final qtyAvailable = (data['qtyAvailable'] as num?)?.toInt() ?? 0;
+          return isStatusActive && qtyAvailable > 0;
+        }).toList();
+
+        activeBatches.sort((a, b) {
+          final aTime = (a.data()['receivedAt'] as Timestamp?)?.toDate() ?? DateTime.now();
+          final bTime = (b.data()['receivedAt'] as Timestamp?)?.toDate() ?? DateTime.now();
+          return aTime.compareTo(bTime);
+        });
+
+        int remainingQty = item.qty;
+
+        for (final doc in activeBatches) {
+          if (remainingQty <= 0) break;
+
+          final data = doc.data();
+          final qtyAvailable = (data['qtyAvailable'] as num).toInt();
+          final batchId = doc.id;
+          final batchNo = data['batchNo'] as String? ?? '';
+          final expiryDate = (data['expiryDate'] as Timestamp?)?.toDate() ?? DateTime.now();
+
+          final int deductQty = qtyAvailable >= remainingQty ? remainingQty : qtyAvailable;
+
+          final bRef = _batches.doc(batchId);
+          batch.update(bRef, {
+            'qtySold':      FieldValue.increment(deductQty),
+            'qtyAvailable': FieldValue.increment(-deductQty),
+            'updatedAt':    FieldValue.serverTimestamp(),
+          });
+
+          resolvedItems.add(item.copyWith(
+            batchId: batchId,
+            batchNo: batchNo,
+            expiryDate: expiryDate,
+            qty: deductQty,
+          ));
+
+          remainingQty -= deductQty;
+        }
+
+        if (remainingQty > 0) {
+          throw ServerException(
+            'Insufficient stock for "${item.tradeName}". '
+            'Requested: ${item.qty}, Available: ${item.qty - remainingQty}',
+          );
+        }
+      }
+
+      // 2. Create invoice document using resolved split items
       final model = InvoiceModel(
         id:                   invoiceRef.id,
         invoiceNo:            invoiceNo,
-        items:                cart.items,
+        items:                resolvedItems,
         subtotal:             cart.subtotal,
         itemDiscountAmount:   cart.itemDiscountAmount,
         globalDiscountPct:    cart.globalDiscountPct,
@@ -131,17 +190,6 @@ class SalesRemoteDataSourceImpl implements SalesRemoteDataSource {
         branchId:             branchId,
       );
       batch.set(invoiceRef, model.toFirestore(isNew: true));
-      print("Updating batch: ${cart.items}");
-     // 2. Deduct stock from each batch
-      for (final item in cart.items) {
-        print("Updating batch: itrem $item");
-        final bRef = _batches.doc(item.batchId);
-        batch.update(bRef, {
-          'qtySold':      FieldValue.increment(item.qty),
-          'qtyAvailable': FieldValue.increment(-item.qty),
-          'updatedAt':    FieldValue.serverTimestamp(),
-        });
-      }
 
       // 3. Update customer loyalty + totalPurchases
       if (cart.customerId != null) {

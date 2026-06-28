@@ -25,8 +25,8 @@ class CreateInvoiceUseCase
     final totalPaid = p.payments.fold(0.0, (s, e) => s + e.amount);
     if (totalPaid < p.cart.grandTotal - 0.01) {
       return Left(ValidationFailure(
-          'Payment amount (Rs ${totalPaid.toStringAsFixed(0)}) '
-          'is less than total (Rs ${p.cart.grandTotal.toStringAsFixed(0)}).'));
+          'Payment amount (\$${totalPaid.toStringAsFixed(0)}) '
+          'is less than total (\$${p.cart.grandTotal.toStringAsFixed(0)}).'));
     }
     if (p.soldBy.trim().isEmpty) {
       return const Left(ValidationFailure('Sold-by user ID is required.'));

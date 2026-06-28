@@ -1,4 +1,4 @@
-import 'package:pharma/dashboard/domain/entities/dashboard_stats.dart';
+import 'package:pharma/features/dashboard/domain/entities/dashboard_stats.dart';
 
 class DashboardModel extends DashboardStats {
   const DashboardModel({

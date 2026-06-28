@@ -115,7 +115,7 @@ class MedicineSearchTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  'Rs ${medicine.salePrice.toStringAsFixed(0)}',
+                  '\$${medicine.salePrice.toStringAsFixed(0)}',
                   style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,

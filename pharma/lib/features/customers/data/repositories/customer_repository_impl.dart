@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import '../../../../core/errors/exceptions.dart';
-import '../../../../core/errors/failures.dart';
+import '../../../../../core/errors/exceptions.dart';
+import '../../../../../core/errors/failures.dart';
 import '../../domain/entities/customer_entity.dart';
 import '../../domain/repositories/customer_repository.dart';
 import '../datasources/customer_datasource.dart';

@@ -58,18 +58,7 @@ class CartViewModel extends Notifier<CartState> {
     return const CartState();
   }
 
-  // ── CART OPERATIONS ──────────────────────────────────────────────────────
 
-  /// ✅ يقبل MedicineEntity مباشرة (نفس الكلاس المستخدم في شاشة المخزون).
-  ///
-  /// ⚠️ ملاحظة مهمة: MedicineEntity لا يحتوي على كمية مخزون فعلية أو
-  /// تاريخ صلاحية (هذه البيانات تعيش في نظام Batches منفصل، غير متوفر
-  /// لنا هنا حاليًا). كحل مؤقت ومتعمّد:
-  ///   - الكمية المتاحة تُعتبر غير محدودة بشكل افتراضي.
-  ///   - [manualAvailableQty] اختياري: لو المستخدم حدّد كمية يدويًا (مثلًا
-  ///     من خلال Dialog عند الإضافة)، يتم التحقق منها كحد أقصى للسلة.
-  ///   - عند ربط نظام Batches الحقيقي لاحقًا، استبدل هذا المنطق بجلب
-  ///     الكمية وتاريخ الصلاحية والـ batchId/batchNo الحقيقيين.
   void addToCart(MedicineEntity medicine, {int? manualAvailableQty}) {
     final unitPrice = medicine.salePrice;
 
@@ -81,7 +70,6 @@ class CartViewModel extends Notifier<CartState> {
       final existing = state.cart.items[existingIdx];
       final newQty   = existing.qty + 1;
 
-      // التحقق من الحد الأقصى فقط إن وُجدت كمية محددة يدويًا
       if (manualAvailableQty != null && newQty > manualAvailableQty) {
         state = state.copyWith(
           actionError:

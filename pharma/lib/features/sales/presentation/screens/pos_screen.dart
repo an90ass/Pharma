@@ -148,7 +148,7 @@ class _POSScreenState extends ConsumerState<POSScreen> {
                   medicineState.medicines.isEmpty,
               medicines: visibleMedicines,
               hasQuery: query.isNotEmpty,
-              onAddToCart: (m) => _handleAddToCart(context, cartVm, cartState, m),
+              onAddToCart: (m) => cartVm.addToCart(m) //_handleAddToCart(context, cartVm, cartState, m),
             ),
           ),
         ],

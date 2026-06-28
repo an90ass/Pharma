@@ -73,12 +73,12 @@ class CartItemTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    'Rs ${item.unitPrice.toStringAsFixed(0)} × ${item.qty}',
+                    '\$${item.unitPrice.toStringAsFixed(0)} × ${item.qty}',
                     style: const TextStyle(
                         fontSize: 11, color: Color(0xFF888888)),
                   ),
                   Text(
-                    'Rs ${item.lineTotal.toStringAsFixed(0)}',
+                    '\$${item.lineTotal.toStringAsFixed(0)}',
                     style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,

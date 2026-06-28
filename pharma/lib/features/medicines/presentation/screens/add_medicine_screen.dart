@@ -202,7 +202,7 @@ class _AddMedicineScreenState extends ConsumerState<AddMedicineScreen> {
             // ── Pricing ────────────────────────────────────────────────
             _card(children: [
               const FormSectionHeader(
-                  title: 'Pricing (PKR)',
+                  title: 'Pricing (\$)',
                   icon: Icons.attach_money_rounded),
               Row(children: [
                 Expanded(

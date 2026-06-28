@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../../core/errors/exceptions.dart';
+import '../../../../../core/errors/exceptions.dart';
 import '../models/customer_model.dart';
 
 class CustomerRemoteDataSource {

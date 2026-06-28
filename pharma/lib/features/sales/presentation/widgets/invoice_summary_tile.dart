@@ -80,7 +80,7 @@ class InvoiceSummaryTile extends StatelessWidget {
                       ),
                       Text(
                         NumberFormat.currency(
-                                symbol: 'Rs ', decimalDigits: 0)
+                                symbol: '\$ ', decimalDigits: 0)
                             .format(invoice.grandTotal),
                         style: const TextStyle(
                             fontSize: 14,

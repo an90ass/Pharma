@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pharma/features/inventory/presentation/screens/create_purchase_order_screen.dart';
+import 'package:pharma/features/inventory/presentation/screens/purchase_orders_screen.dart';
 import 'package:pharma/features/settings/presentation/screens/settings_screen.dart';
 
-import '../../customers/presentation/screens/add_customer_screen.dart';
-import '../../customers/presentation/screens/customer_list_screen.dart';
-import '../../dashboard/presentation/screens/dashboard_screen.dart';
+import '../../features/customers/presentation/screens/add_customer_screen.dart';
+import '../../features/customers/presentation/screens/customer_list_screen.dart';
+import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
+import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/medicines/presentation/screens/add_medicine_screen.dart';
 import '../../features/medicines/presentation/screens/medicine_list_screen.dart';
 import '../../features/sales/presentation/screens/cart_screen.dart';
@@ -81,7 +84,44 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (_, state) =>
             InvoiceDetailScreen(invoiceId: state.pathParameters['id']!),
       ),
-
+ GoRoute(
+        path: '/inventory',
+        builder: (_, __) => const InventoryScreen(),
+        routes: [
+          GoRoute(
+            path: 'receive',
+            builder: (_, __) => Scaffold(
+              appBar: AppBar(
+                title: const Text('Receive Stock'),
+                backgroundColor: const Color(0xFFF7F8FC),
+                elevation: 0,
+              ),
+              body: const Center(child: Text('Receive Stock Screen')),
+            ),
+          ),
+          GoRoute(
+            path: 'adjust',
+            builder: (_, __) => Scaffold(
+              appBar: AppBar(
+                title: const Text('Adjust Stock'),
+                backgroundColor: const Color(0xFFF7F8FC),
+                elevation: 0,
+              ),
+              body: const Center(child: Text('Adjust Stock Screen')),
+            ),
+          ),
+          GoRoute(
+            path: 'orders',
+            builder: (_, __) => const PurchaseOrdersScreen(),
+            routes: [
+              GoRoute(
+                path: 'new',
+                builder: (_, __) => const CreatePurchaseOrderScreen(),
+              ),
+            ],
+          ),
+        ],
+      ),
     ],
 
       errorBuilder: (context, state) => Scaffold(
