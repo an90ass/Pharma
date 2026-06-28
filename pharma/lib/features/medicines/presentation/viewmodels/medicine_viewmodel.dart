@@ -164,12 +164,12 @@ void _startWatching() {
   }
 
   void clearFilters() {
+    restartWatching();
     state = state.copyWith(
       clearCategory: true,
       clearForm: true,
       controlledOnly: false,
-      filtered: _applyFilters(state.medicines,
-          query: state.searchQuery, controlledOnly: false),
+      
     );
   }
 
