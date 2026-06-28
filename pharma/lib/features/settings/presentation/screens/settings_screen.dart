@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pharma/features/settings/domain/entities/app_theme_mode.dart' show AppThemeMode;
+import 'package:pharma/features/settings/presentation/viewmodels/theme_viewmodel.dart';
 
 /// Main Settings screen.
 /// Wire ThemeModeSelector, pharmacy config, and user info here.
@@ -10,11 +12,10 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F8FC),
+
       appBar: AppBar(
         title: const Text('Settings',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-        backgroundColor: const Color(0xFFF7F8FC),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
@@ -34,7 +35,10 @@ class SettingsScreen extends ConsumerWidget {
             label: 'Dark mode',
             subtitle: 'Light / Dark / System',
             color: const Color(0xFF1565C0),
-            onTap: () {},
+            onTap: () {
+              _showThemeModeSheet(context);
+
+            },
           ),
           const SizedBox(height: 16),
 
@@ -43,21 +47,21 @@ class SettingsScreen extends ConsumerWidget {
           _SettingsTile(
             icon: Icons.local_pharmacy_rounded,
             label: 'Pharmacy name',
-            subtitle: 'PharmaCare Pharmacy',
+            subtitle: 'Pharma',
             color: const Color(0xFF2E7D32),
             onTap: () => _showPharmacyEditSheet(context),
           ),
           _SettingsTile(
             icon: Icons.location_on_rounded,
             label: 'Address',
-            subtitle: 'Shop # 12, Main Market',
+            subtitle: 'Shop # 113, Main Market',
             color: const Color(0xFF2E7D32),
             onTap: () {},
           ),
           _SettingsTile(
             icon: Icons.phone_rounded,
             label: 'Phone',
-            subtitle: '+92-51-1234567',
+            subtitle: '+9053979000',
             color: const Color(0xFF2E7D32),
             onTap: () {},
           ),
@@ -70,7 +74,11 @@ class SettingsScreen extends ConsumerWidget {
             label: 'Manage branches',
             subtitle: 'Add, edit, switch branches',
             color: const Color(0xFF7B1FA2),
-            onTap: () => Navigator.pushNamed(context, '/stores'),
+            onTap: () => {
+
+            }
+            
+           // Navigator.pushNamed(context, '/stores'),
           ),
           const SizedBox(height: 16),
 
@@ -104,7 +112,7 @@ class SettingsScreen extends ConsumerWidget {
 
           const SizedBox(height: 32),
           const Center(
-            child: Text('PharmaCare v1.0.0',
+            child: Text('Pharma v1.0.0',
                 style: TextStyle(fontSize: 11, color: Color(0xFFBBBBBB))),
           ),
         ],
@@ -113,10 +121,10 @@ class SettingsScreen extends ConsumerWidget {
   }
 
   void _showPharmacyEditSheet(BuildContext context) {
-    final nameCtrl    = TextEditingController(text: 'PharmaCare Pharmacy');
-    final addressCtrl = TextEditingController(text: 'Shop # 12, Main Market');
-    final phoneCtrl   = TextEditingController(text: '+92-51-1234567');
-    final ntnCtrl     = TextEditingController(text: '1234567-8');
+    final nameCtrl    = TextEditingController(text: 'Pharma');
+    final addressCtrl = TextEditingController(text: 'Shop # 113, Main Market');
+    final phoneCtrl   = TextEditingController(text: '+9053979000');
+    final ntnCtrl     = TextEditingController(text: '123456713-8');
     final licCtrl     = TextEditingController(text: 'DL-2024-ISB-00142');
 
     showModalBottomSheet(
@@ -206,6 +214,19 @@ class SettingsScreen extends ConsumerWidget {
               borderSide: const BorderSide(color: Color(0xFFE0E0E0))),
         ),
       );
+      
+    void _showThemeModeSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.transparent,
+    builder: (sheetCtx) => ProviderScope(
+      parent: ProviderScope.containerOf(context),
+      child: const _ThemeModeSheet(),
+    ),
+  );
+
+        }
 }
 
 class _SectionHeader extends StatelessWidget {
@@ -237,7 +258,6 @@ class _SettingsTile extends StatelessWidget {
   Widget build(BuildContext context) => Container(
         margin: const EdgeInsets.only(bottom: 8),
         decoration: BoxDecoration(
-          color: Colors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
               color: Colors.black.withOpacity(0.06), width: 0.8),
@@ -264,4 +284,197 @@ class _SettingsTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(12)),
         ),
       );
+}
+// ── Theme mode bottom sheet ────────────────────────────────────────────────────
+
+class _ThemeModeSheet extends ConsumerWidget {
+  const _ThemeModeSheet();
+
+static const _options = [
+  (mode: AppThemeMode.light,  label: 'Light',   sub: 'Always use light interface',  icon: Icons.light_mode_rounded),
+  (mode: AppThemeMode.dark,   label: 'Dark',    sub: 'Always use dark interface',   icon: Icons.dark_mode_rounded),
+  (mode: AppThemeMode.system, label: 'System',  sub: 'Follow device setting',       icon: Icons.brightness_auto_rounded),
+];
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final current = ref.watch(themeViewModelProvider);
+
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      padding: const EdgeInsets.fromLTRB(20, 12, 20, 36),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Handle bar
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE0E0E0),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+          ),
+          const SizedBox(height: 18),
+
+          // Title
+          Row(
+            children: [
+              Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0A4D3C).withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(
+                  Icons.palette_rounded,
+                  color: Color(0xFF0A4D3C),
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Text(
+  'App Appearance',
+  style: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w800,
+    color: Color(0xFF0D1F1A),
+  ),
+),
+Text(
+  'Choose your preferred theme',
+  style: TextStyle(
+    fontSize: 11,
+    color: Color(0xFF5A7268),
+  ),
+),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+
+          // Options
+          ..._options.map((opt) {
+            final selected = current == opt.mode;
+            return GestureDetector(
+              onTap: () async {
+                await ref
+                    .read(themeViewModelProvider.notifier)
+                    .setThemeMode( opt.mode );
+                if (context.mounted) Navigator.pop(context);
+              },
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(bottom: 10),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 14, vertical: 13),
+                decoration: BoxDecoration(
+                  color: selected
+                      ? const Color(0xFF0A4D3C).withOpacity(0.07)
+                      : const Color(0xFFF9FAFB),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: selected
+                        ? const Color(0xFF0A4D3C).withOpacity(0.35)
+                        : const Color(0xFFE5E7EB),
+                    width: selected ? 1.5 : 1,
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    // Icon
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: selected
+                            ? const Color(0xFF0A4D3C).withOpacity(0.12)
+                            : Colors.white,
+                        borderRadius: BorderRadius.circular(11),
+                        border: Border.all(
+                          color: selected
+                              ? const Color(0xFF0A4D3C).withOpacity(0.2)
+                              : const Color(0xFFE5E7EB),
+                        ),
+                      ),
+                      child: Icon(
+                        opt.icon,
+                        size: 20,
+                        color: selected
+                            ? const Color(0xFF0A4D3C)
+                            : const Color(0xFF9CA3AF),
+                      ),
+                    ),
+                    const SizedBox(width: 14),
+
+                    // Label + subtitle
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            opt.label,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              color: selected
+                                  ? const Color(0xFF0A4D3C)
+                                  : const Color(0xFF0D1F1A),
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            opt.sub,
+                            style: const TextStyle(
+                              fontSize: 11.5,
+                              color: Color(0xFF9CA3AF),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Check indicator
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: selected
+                          ? Container(
+                              key: const ValueKey('check'),
+                              width: 24,
+                              height: 24,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFF1DB87A),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.check_rounded,
+                                color: Colors.white,
+                                size: 14,
+                              ),
+                            )
+                          : const SizedBox(
+                              key: ValueKey('empty'),
+                              width: 24,
+                              height: 24,
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }),
+        ],
+      ),
+    );
+  }
 }

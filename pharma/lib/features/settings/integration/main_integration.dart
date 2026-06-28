@@ -41,7 +41,7 @@
 //       final themeMode = ref.watch(themeViewModelProvider);
 //
 //       return MaterialApp.router(
-//         title: 'PharmaCare',
+//         title: 'Pharma',
 //         theme:     AppTheme.light,
 //         darkTheme: AppTheme.dark,
 //         themeMode: themeMode.toFlutterThemeMode(),
