@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pharma/features/settings/presentation/screens/settings_screen.dart';
 
+import '../../customers/presentation/screens/add_customer_screen.dart';
+import '../../customers/presentation/screens/customer_list_screen.dart';
 import '../../dashboard/presentation/screens/dashboard_screen.dart';
 import '../../features/medicines/presentation/screens/add_medicine_screen.dart';
 import '../../features/medicines/presentation/screens/medicine_list_screen.dart';
@@ -46,7 +48,16 @@ final appRouterProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-
+  GoRoute(
+        path: '/customers',
+        builder: (_, __) => const CustomerListScreen(),
+        routes: [
+          GoRoute(
+            path: 'add',
+            builder: (_, __) => const AddCustomerScreen(),
+          ),
+        ],
+      ),
     ],
 
       errorBuilder: (context, state) => Scaffold(
