@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:pharma/features/settings/presentation/screens/settings_screen.dart';
 
 import '../../dashboard/presentation/screens/dashboard_screen.dart';
+import '../../features/medicines/presentation/screens/add_medicine_screen.dart';
+import '../../features/medicines/presentation/screens/medicine_list_screen.dart';
 
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -18,7 +20,33 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/settings',
         builder: (_, __) => const SettingsScreen(),
       ),
- 
+    GoRoute(
+        path: '/medicines',
+        builder: (_, __) => const MedicineListScreen(),
+        routes: [
+          GoRoute(
+            path: 'add',
+            builder: (_, __) => const AddMedicineScreen(),
+          ),
+          GoRoute(
+            path: ':id',
+            builder: (_, state) => Scaffold(
+              appBar: AppBar(
+                title: const Text('Edit Medicine'),
+                backgroundColor: const Color(0xFFF7F8FC),
+                elevation: 0,
+              ),
+              body: Center(
+                child: Text(
+                  'Edit Medicine: ${state.pathParameters['id']}',
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+
     ],
 
       errorBuilder: (context, state) => Scaffold(
