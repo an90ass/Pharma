@@ -48,7 +48,7 @@ class ActivityTile extends StatelessWidget {
                     if (activity.amount != null)
                       Text(
                         NumberFormat.currency(
-                          symbol: 'Rs ',
+                          symbol: '\$ ',
                           decimalDigits: 0,
                         ).format(activity.amount),
                         style: TextStyle(

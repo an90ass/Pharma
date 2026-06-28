@@ -103,7 +103,7 @@ class CustomerListScreen extends ConsumerWidget {
                           children: [
                             Text(
                               NumberFormat.currency(
-                                      symbol: 'Rs ', decimalDigits: 0)
+                                      symbol: '\$ ', decimalDigits: 0)
                                   .format(c.totalPurchases),
                               style: const TextStyle(
                                   fontSize: 12, fontWeight: FontWeight.w700,

@@ -8,6 +8,10 @@ import '../../customers/presentation/screens/customer_list_screen.dart';
 import '../../dashboard/presentation/screens/dashboard_screen.dart';
 import '../../features/medicines/presentation/screens/add_medicine_screen.dart';
 import '../../features/medicines/presentation/screens/medicine_list_screen.dart';
+import '../../features/sales/presentation/screens/cart_screen.dart';
+import '../../features/sales/presentation/screens/invoice_detail_screen.dart';
+import '../../features/sales/presentation/screens/pos_screen.dart';
+import '../../features/sales/presentation/screens/sales_history_screen.dart';
 
 
 final appRouterProvider = Provider<GoRouter>((ref) {
@@ -56,8 +60,28 @@ final appRouterProvider = Provider<GoRouter>((ref) {
             path: 'add',
             builder: (_, __) => const AddCustomerScreen(),
           ),
+
+  
         ],
       ),
+       GoRoute(
+        path: '/pos',
+        builder: (_, __) => const POSScreen(),
+      ),
+      GoRoute(
+        path: '/cart',
+        builder: (_, __) => const CartScreen(),
+      ),
+      GoRoute(
+        path: '/sales',
+        builder: (_, __) => const SalesHistoryScreen(),
+      ),
+      GoRoute(
+        path: '/invoices/:id',
+        builder: (_, state) =>
+            InvoiceDetailScreen(invoiceId: state.pathParameters['id']!),
+      ),
+
     ],
 
       errorBuilder: (context, state) => Scaffold(

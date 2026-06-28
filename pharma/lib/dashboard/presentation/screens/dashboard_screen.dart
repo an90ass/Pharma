@@ -352,7 +352,7 @@ class _TodaysSalesCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final formatter =
-        NumberFormat.currency(symbol: 'Rs ', decimalDigits: 0);
+        NumberFormat.currency(symbol: '\$ ', decimalDigits: 0);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
