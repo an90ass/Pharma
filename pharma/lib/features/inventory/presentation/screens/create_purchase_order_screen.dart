@@ -396,7 +396,7 @@ class _POItemRowWidget extends StatelessWidget {
           width: 80,
           child: _CompactField(
             controller: row.priceCtrl,
-            hint: 'Rs',
+            hint: '\$',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             onChanged: (_) => onChanged(),
           ),

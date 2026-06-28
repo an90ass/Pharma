@@ -167,7 +167,7 @@ class _POSScreenState extends ConsumerState<POSScreen> {
                   color: Colors.white),
               label: Text(
                 '${cartState.cart.totalQty} items · '
-                'Rs ${cartState.cart.grandTotal.toStringAsFixed(0)}',
+                '\$ ${cartState.cart.grandTotal.toStringAsFixed(0)}',
                 style: const TextStyle(
                     color: Colors.white, fontWeight: FontWeight.w600),
               ),
@@ -337,7 +337,7 @@ class _CartSummaryBar extends StatelessWidget {
             ),
           ),
           Text(
-            'Rs ${state.cart.grandTotal.toStringAsFixed(0)}',
+            '\$ ${state.cart.grandTotal.toStringAsFixed(0)}',
             style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
@@ -487,7 +487,7 @@ class _MedicineCatalogTile extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Rs ${medicine.salePrice.toStringAsFixed(0)}',
+                  '\$ ${medicine.salePrice.toStringAsFixed(0)}',
                   style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
