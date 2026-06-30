@@ -47,6 +47,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
       }
       if (next.actionStatus == CartActionStatus.success &&
           next.completedInvoice != null) {
+            print('Navigating to invoice detail for invoice ID: ${next.completedInvoice!.id}');
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

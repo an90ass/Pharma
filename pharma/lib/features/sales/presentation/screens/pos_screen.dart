@@ -43,33 +43,32 @@ class _POSScreenState extends ConsumerState<POSScreen> {
                 (m.barcode?.toLowerCase().contains(query) ?? false);
           }).toList();
 
-    // Snackbar + توجيه للفاتورة عند نجاح الدفع
-    ref.listen(cartViewModelProvider, (_, next) {
-      if (next.actionStatus == CartActionStatus.error &&
-          next.actionError != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(next.actionError!),
-          backgroundColor: const Color(0xFFE53935),
-          behavior: SnackBarBehavior.floating,
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)),
-        ));
-        cartVm.clearMessages();
-      }
-      if (next.actionStatus == CartActionStatus.success &&
-          next.completedInvoice != null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => InvoiceDetailScreen(
-              invoiceId: next.completedInvoice!.id,
-              fromCheckout: true,
-            ),
-          ),
-        );
-      }
+ref.listen(cartViewModelProvider, (_, next) {
+  if (next.actionStatus == CartActionStatus.error &&
+      next.actionError != null) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(next.actionError!),
+        backgroundColor: const Color(0xFFE53935),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)),
+      ));
+      cartVm.clearMessages();
     });
+  }
 
+  if (next.actionStatus == CartActionStatus.success &&
+      next.completedInvoice != null) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!context.mounted) return;
+      cartVm.clearMessages();
+      // استخدم go_router بدل Navigator
+      context.go('/invoice/${next.completedInvoice!.id}?fromCheckout=true');
+    });
+  }
+});
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8FC),
       appBar: _buildAppBar(context, cartState, cartVm),
