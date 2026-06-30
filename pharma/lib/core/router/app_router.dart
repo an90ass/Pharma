@@ -5,6 +5,7 @@ import 'package:pharma/features/inventory/presentation/screens/create_purchase_o
 import 'package:pharma/features/inventory/presentation/screens/purchase_orders_screen.dart';
 import 'package:pharma/features/reports/presentation/screens/reports_screen.dart' show ReportsScreen;
 import 'package:pharma/features/settings/presentation/screens/settings_screen.dart';
+import 'package:pharma/features/stores/presentation/screens/store_management_screen.dart';
 import 'package:pharma/features/suppliers/presentation/screens/supplier_list_screen.dart';
 
 import '../../features/customers/presentation/screens/add_customer_screen.dart';
@@ -132,6 +133,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/reports',
         builder: (_, __) => const ReportsScreen(),
       ),
+            GoRoute(
+        path: '/stores',
+        builder: (_, __) => const StoreManagementScreen(),
+      ),
+
     ],
 
       errorBuilder: (context, state) => Scaffold(
