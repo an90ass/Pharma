@@ -28,11 +28,8 @@ class _POSScreenState extends ConsumerState<POSScreen> {
     final cartState = ref.watch(cartViewModelProvider);
     final cartVm     = ref.read(cartViewModelProvider.notifier);
 
-    // ✅ القائمة الكاملة تأتي من medicineViewModelProvider (نفس مصدر شاشة
-    // المخزون) — مش من بحث منفصل. البحث هنا فلترة محلية فقط.
     final medicineState = ref.watch(medicineViewModelProvider);
 
-    // فلترة فورية حسب نص البحث، بدون حد أدنى لعدد الحروف
     final query = _searchCtrl.text.trim().toLowerCase();
     final visibleMedicines = query.isEmpty
         ? medicineState.medicines
@@ -139,7 +136,6 @@ ref.listen(cartViewModelProvider, (_, next) {
 
           const SizedBox(height: 8),
 
-          // ── الكتالوج (يظهر دائمًا، يتفلتر فورًا) ───────────────────────
           Expanded(
             child: _CatalogGrid(
               isLoading: medicineState.actionStatus ==
@@ -153,7 +149,6 @@ ref.listen(cartViewModelProvider, (_, next) {
         ],
       ),
 
-      // ── Cart FAB ──────────────────────────────────────────────────
       floatingActionButton: cartState.cart.isEmpty
           ? null
           : FloatingActionButton.extended(

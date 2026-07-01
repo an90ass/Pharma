@@ -9,7 +9,9 @@ import 'purchase_orders_screen.dart';
 import 'adjust_stock_screen.dart';
 
 class InventoryScreen extends ConsumerStatefulWidget {
-  const InventoryScreen({super.key});
+  const InventoryScreen({super.key, this.initialTab = 0});
+
+  final int initialTab;
 
   @override
   ConsumerState<InventoryScreen> createState() => _InventoryScreenState();
@@ -22,7 +24,7 @@ class _InventoryScreenState extends ConsumerState<InventoryScreen>
   @override
   void initState() {
     super.initState();
-    _tab = TabController(length: 3, vsync: this);
+    _tab = TabController(length: 3, vsync: this, initialIndex: widget.initialTab);
   }
 
   @override

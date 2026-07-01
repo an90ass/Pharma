@@ -14,6 +14,7 @@ import '../../features/dashboard/presentation/screens/dashboard_screen.dart';
 import '../../features/inventory/presentation/screens/inventory_screen.dart';
 import '../../features/medicines/presentation/screens/add_medicine_screen.dart';
 import '../../features/medicines/presentation/screens/medicine_list_screen.dart';
+import 'package:pharma/features/notifications/presentation/screens/notifications_screen.dart';
 import '../../features/sales/presentation/screens/cart_screen.dart';
 import '../../features/sales/presentation/screens/invoice_detail_screen.dart';
 import '../../features/sales/presentation/screens/pos_screen.dart';
@@ -31,6 +32,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
   GoRoute(
         path: '/settings',
         builder: (_, __) => const SettingsScreen(),
+      ),
+  GoRoute(
+        path: '/notifications',
+        builder: (_, __) => const NotificationsScreen(),
       ),
     GoRoute(
         path: '/medicines',

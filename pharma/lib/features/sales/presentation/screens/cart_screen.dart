@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../viewmodels/cart_viewmodel.dart';
+import 'package:pharma/features/recommendations/presentation/widgets/recommendation_card.dart';
+import 'package:pharma/features/recommendations/presentation/viewmodels/recommendation_viewmodel.dart';
 import '../widgets/cart_item_tile.dart';
 import '../widgets/payment_method_selector.dart';
 import 'invoice_detail_screen.dart';
@@ -100,19 +102,27 @@ class _CartScreenState extends ConsumerState<CartScreen>
 
 // ── Items tab ─────────────────────────────────────────────────────────────────
 
-class _ItemsTab extends StatelessWidget {
+class _ItemsTab extends ConsumerWidget {
   const _ItemsTab({required this.state, required this.vm});
   final CartState state;
   final CartViewModel vm;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     if (state.cart.isEmpty) {
       return const Center(
         child: Text('Cart is empty',
             style: TextStyle(fontSize: 15, color: Color(0xFF888888))),
       );
     }
+
+    // Load cart recommendations based on current cart items
+    final recVm = ref.read(recommendationViewModelProvider.notifier);
+    final itemIds = state.cart.items.map((i) => i.medicineId).toList();
+    Future.microtask(() => recVm.loadCartRecommendations(itemIds));
+
+    final recState = ref.watch(recommendationViewModelProvider);
+
     return ListView(
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 100),
       children: [
@@ -136,6 +146,15 @@ class _ItemsTab extends StatelessWidget {
         // Totals card
         const SizedBox(height: 8),
         _TotalsCard(state: state, vm: vm),
+
+        // Recommendations carousel
+        const SizedBox(height: 16),
+        RecommendationCarousel(
+          title: 'You may also like',
+          description: 'Products commonly bought with current items, substitutes, or reorder suggestions.',
+          recs: recState.cartRecs,
+          onAdd: (rec) => vm.addRecommendationToCart(rec),
+        ),
       ],
     );
   }

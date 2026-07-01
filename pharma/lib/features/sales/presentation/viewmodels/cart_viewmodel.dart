@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../medicines/domain/entities/medicine_entity.dart';
+import '../../../../../features/recommendations/domain/entities/medicine_recommendation.dart';
 import '../../domain/entities/cart_entity.dart';
 import '../../domain/entities/invoice_entity.dart';
 import '../../domain/entities/invoice_item_entity.dart';
@@ -206,6 +207,33 @@ class CartViewModel extends Notifier<CartState> {
   void clearMessages() =>
       state = state.copyWith(
           clearError: true, actionStatus: CartActionStatus.idle);
+
+  /// Convenience: add a recommendation item to cart using recommendation data.
+  void addRecommendationToCart(MedicineRecommendation rec) {
+    final existingIdx = state.cart.items
+        .indexWhere((i) => i.medicineId == rec.medicineId);
+
+    List<InvoiceItemEntity> updated;
+    if (existingIdx >= 0) {
+      final existing = state.cart.items[existingIdx];
+      updated = List.from(state.cart.items)
+        ..[existingIdx] = existing.copyWith(qty: existing.qty + 1);
+    } else {
+      final newItem = InvoiceItemEntity(
+        medicineId:  rec.medicineId,
+        tradeName:   rec.tradeName,
+        genericName: rec.genericName,
+        batchId:     rec.medicineId,
+        batchNo:     '',
+        expiryDate:  DateTime.now(),
+        unitPrice:   rec.salePrice,
+        qty:         1,
+      );
+      updated = [...state.cart.items, newItem];
+    }
+
+    state = state.copyWith(cart: state.cart.copyWith(items: updated));
+  }
 }
 
 final cartViewModelProvider =
